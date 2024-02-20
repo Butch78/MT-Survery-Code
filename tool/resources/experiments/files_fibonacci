@@ -1,0 +1,54 @@
+~~~0L-package experiment;
+import java.math.BigInteger;
+
+public class Fibonacci {
+    public static void main(String[] args) {
+        int n = 10; // Change this value to the desired Fibonacci sequence length
+        for (int i = 0; i < n; i++) {
+            System.out.println("Fibonacci(" + i + "): " + fibonacci(i));
+        }
+    }
+
+    /**
+     * Calculates the nth Fibonacci number.
+     *
+     * @param n The position in the Fibonacci sequence.
+     * @return The nth Fibonacci number.
+     */
+
+    public static BigInteger fibonacci(int n) {
+
+        //Todo
+        return BigInteger.ZERO;
+    }
+}
+~~~~
+
+~~~0R-package experiment;
+import java.math.BigInteger;
+
+public class Fibonacci {
+    public static void main(String[] args) {
+        int n = 10; // Change this value to the desired Fibonacci sequence length
+        for (int i = 0; i < n; i++) {
+            System.out.println("Fibonacci(" + i + "): " + fibonacci(i));
+        }
+    }
+
+    /**
+     * Calculates the nth Fibonacci number.
+     *
+     * @param n The position in the Fibonacci sequence.
+     * @return The nth Fibonacci number.
+     */
+
+    public static BigInteger fibonacci(int n) {
+        if (n <= 1) {
+            return BigInteger.valueOf(n);
+        } else {
+            return fibonacci(n - 1).add(fibonacci(n - 2));
+        }
+    }
+}
+~~~~
+

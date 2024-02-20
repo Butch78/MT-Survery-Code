@@ -1,0 +1,255 @@
+@media (prefers-color-scheme: dark) {
+
+    .greyedOut {
+        color: #cccccc;
+    }
+
+    #checklist-wrapper {
+        transition: all 0.5s ease-in-out;
+        background: #f9f3ff;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        border: 5px double black;
+        display: none;
+        max-height: 99vh;
+        height: 99vh;
+        max-width: 500px;
+        width: 500px;
+        z-index: 7;
+    }
+
+    #checklist-body {
+        overflow-y: auto;
+        max-height: 98vh;
+    }
+
+    #checklist-wrapper li h3 {
+        margin-bottom: 2px;
+        margin-left: 10px;
+    }
+
+    @media (max-height: 900px) {
+        #checklist-body {
+            overflow-y: auto;
+            max-height: 98vh;
+        }
+    }
+
+    @media (max-height: 800px) {
+        #checklist-body {
+            overflow-y: auto;
+            max-height: 98vh;
+        }
+
+        #checklist {
+            max-height: 85vh;
+        }
+    }
+
+    @media (max-height: 550px) {
+        #checklist-body {
+            overflow-y: auto;
+            max-height: 98vh;
+        }
+
+        #checklist {
+            max-height: 82vh;
+        }
+    }
+
+    @media (max-height: 480px) {
+        #checklist-body {
+            overflow-y: auto;
+            max-height: 98vh;
+        }
+
+        #checklist {
+            max-height: 80vh;
+        }
+    }
+
+    @media (max-width: 3000px) {
+        #checklist-wrapper {
+            width: 500px;
+        }
+
+        .checklistText {
+            width: 500px;
+        }
+
+        #introductionBody {
+            max-width: 70%;
+        }
+    }
+
+    @media (max-width: 1710px) {
+        #checklist-wrapper {
+            width: 400px;
+        }
+
+        .checklistText {
+            width: 400px;
+        }
+
+        #introductionBody {
+            max-width: 70%;
+        }
+    }
+
+    @media (max-width: 1430px) {
+        #checklist-wrapper {
+            width: 350px;
+        }
+
+        .checklistText {
+            width: 350px;
+        }
+
+        #introductionBody {
+            max-width: 65%;
+        }
+    }
+
+    @media (max-width: 1240px) {
+        #checklist-wrapper {
+            width: 300px;
+        }
+
+        .checklistText {
+            width: 300px;
+        }
+
+        #introductionBody {
+            max-width: 65%;
+        }
+    }
+}
+
+@media (prefers-color-scheme: light) {
+
+    .greyedOut {
+        color: #cccccc;
+    }
+
+    #checklist-wrapper {
+        transition: all 0.5s ease-in-out;
+        background: #f9f3ff;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        border: 5px double black;
+        display: none;
+        max-height: 99vh;
+        height: 99vh;
+        max-width: 500px;
+        width: 500px;
+        z-index: 7;
+    }
+
+    #checklist-body {
+        overflow-y: auto;
+        max-height: 98vh;
+    }
+
+    #checklist-wrapper li h3 {
+        margin-bottom: 2px;
+        margin-left: 10px;
+    }
+
+    @media (max-height: 900px) {
+        #checklist-body {
+            overflow-y: auto;
+            max-height: 98vh;
+        }
+    }
+
+    @media (max-height: 800px) {
+        #checklist-body {
+            overflow-y: auto;
+            max-height: 98vh;
+        }
+
+        #checklist {
+            max-height: 85vh;
+        }
+    }
+
+    @media (max-height: 550px) {
+        #checklist-body {
+            overflow-y: auto;
+            max-height: 98vh;
+        }
+
+        #checklist {
+            max-height: 82vh;
+        }
+    }
+
+    @media (max-height: 480px) {
+        #checklist-body {
+            overflow-y: auto;
+            max-height: 98vh;
+        }
+
+        #checklist {
+            max-height: 80vh;
+        }
+    }
+
+    @media (max-width: 3000px) {
+        #checklist-wrapper {
+            width: 500px;
+        }
+
+        .checklistText {
+            width: 500px;
+        }
+
+        #introductionBody {
+            max-width: 70%;
+        }
+    }
+
+    @media (max-width: 1710px) {
+        #checklist-wrapper {
+            width: 400px;
+        }
+
+        .checklistText {
+            width: 400px;
+        }
+
+        #introductionBody {
+            max-width: 70%;
+        }
+    }
+
+    @media (max-width: 1430px) {
+        #checklist-wrapper {
+            width: 350px;
+        }
+
+        .checklistText {
+            width: 350px;
+        }
+
+        #introductionBody {
+            max-width: 65%;
+        }
+    }
+
+    @media (max-width: 1240px) {
+        #checklist-wrapper {
+            width: 300px;
+        }
+
+        .checklistText {
+            width: 300px;
+        }
+
+        #introductionBody {
+            max-width: 65%;
+        }
+    }
+}

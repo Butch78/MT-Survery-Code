@@ -1,0 +1,335 @@
+~~~0L-src/main/java/experiment/UserRegistration.java
+package main.java.service;
+
+import main.java.entity.PaymentPreference;
+import main.java.entity.User;
+import main.java.database.UserDataAccess;
+import main.java.database.PaymentPreferenceDataAccess;
+
+import java.util.UUID;
+
+public class UserRegistration {
+    private final UserDataAccess db;
+    private final PaymentPreferenceDataAccess paymentDb;
+
+    public UserRegistration(UserDataAccess db, PaymentPreferenceDataAccess paymentDb) {
+        this.db = db;
+        this.paymentDb = paymentDb;
+    }
+
+    /**
+     * Registers a new user with the given username and password.
+     * @param u - The desired username for the new user.
+     * @param p - The desired password for the new user.
+     * @return - true if the registration was successful, false otherwise.
+     */
+    public boolean process(String u, String p) {
+        //Todo
+        return null;
+    }
+
+    /**
+     * Checks if a user with the provided username exists in the database.
+     * @param username - The username to check.
+     * @return - true if the user exists, false otherwise.
+     */
+    private boolean userExists(String username) {
+        //Todo
+        return null;
+    }
+
+    /**
+     * Resets the password for the specified user to a default value.
+     * Generates a default password for the user, encrypts it using the salt of the user.
+     * @param username - The name of the user.
+     * @return - true if the password was successfully reset, false otherwise.
+     */
+    public boolean resetUserPassword(String username) {
+        //Todo
+        return null;
+    }
+
+    /**
+     * Validates that the provided username and password are not null.
+     * @param username - The username to be validated.
+     * @param password - The password to be validated.
+     * @return - true if both username and password are not null, false otherwise.
+     */
+    private boolean isValidInput(String username, String password) {
+        //Todo
+        return null;
+    }
+
+    /**
+     * Updates the password and preferred payment method for a user.
+     * Encrypts the new password with salt and updates the database.
+     * @param username - The username of the user to be updated.
+     * @param newPassword - The new password to be set for the user.
+     * @param newPayment - The new preferred payment method for the user.
+     * @return - true if updated successfully, false otherwise.
+     */
+    public boolean updateUserDetails(String username, String newPassword, String newPayment) {
+        //Todo
+        return null;
+    }
+}
+~~~~
+
+~~~1L-src/main/java/experiment/PasswordManagement.java
+package main.java.service;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
+
+public class PasswordManagement {
+    private static final String DEFAULT_HASH_ALGORITHM = "SHA-256";
+    private static int[] passwordStrengthCount = new int[3]; // 0: weak, 1: medium, 2: strong
+    private static final int MASK = 0xff;
+
+    /**
+     * Validates the strength of the given password based on length and character.
+     * Updates the passwordStrengthCount array based on password strength.
+     * @param password - The password to validate.
+     * @return - true if the password is considered strong, false otherwise.
+     */
+    public static boolean checkPasswordStrength(String password) {
+        //Todo
+        return null;
+    }
+
+    /**
+     * Encrypts the provided password using SHA-256 hashing with a specified salt.
+     * @param password - The plain text password to be encrypted.
+     * @param salt - The salt to be used in the encryption process.
+     * @return - a hashed version of the password combined with the salt.
+     */
+    public static String encryptPassword(String password, String salt) {
+        //Todo
+        return null;
+    }
+
+    /**
+     * Processes user credentials to create an authentication token.
+     * Uses custom byte-to-hex conversion with bitwise operations.
+     * @param password - The login password of the user.
+     * @param salt - An additional string for improving token uniqueness.
+     * @return - a processed version of the user credentials for login.
+     */
+    public static String hashPasswordWithSalt(String password, String salt) {
+        //Todo
+        return null;
+    }
+
+    /**
+     * Generates a random salt which can be combined with a password before hashing.
+     * Uses salting to ensure unique hashes even for identical passwords.
+     * @return - a base64 encoded string representing the generated salt.
+     */
+    public static String generateSalt() {
+        //Todo
+        return null;
+    }
+}
+~~~~
+
+~~~0R-src/main/java/experiment/UserRegistration.java
+package main.java.service;
+
+import main.java.entity.PaymentPreference;
+import main.java.entity.User;
+import main.java.database.UserDataAccess;
+import main.java.database.PaymentPreferenceDataAccess;
+
+import java.util.UUID;
+
+public class UserRegistration {
+    private final UserDataAccess db;
+    private final PaymentPreferenceDataAccess paymentDb;
+
+    public UserRegistration(UserDataAccess db, PaymentPreferenceDataAccess paymentDb) {
+        this.db = db;
+        this.paymentDb = paymentDb;
+    }
+
+    /**
+     * Registers a new user with the given username and password.
+     * @param u - The desired username for the new user.
+     * @param p - The desired password for the new user.
+     * @return - true if the registration was successful, false otherwise.
+     */
+    public boolean process(String u, String p) {
+        if (!isValidInput(u, p)) {
+            return false;
+        }
+
+        if (userExists(u)) {
+            return false;
+        }
+
+        String salt = PasswordManagement.generateSalt();
+        String encryptedPassword = PasswordManagement.encryptPassword(p, salt);
+        return db.addUser(new User(encryptedPassword, salt, u));
+    }
+
+    /**
+     * Checks if a user with the provided username exists in the database.
+     * @param username - The username to check.
+     * @return - true if the user exists, false otherwise.
+     */
+    private boolean userExists(String username) {
+        return db.findUserByUsername(username) != null;
+    }
+
+    /**
+     * Resets the password for the specified user to a default value.
+     * Generates a default password for the user, encrypts it using the salt of the user.
+     * @param username - The name of the user.
+     * @return - true if the password was successfully reset, false otherwise.
+     */
+    public boolean resetUserPassword(String username) {
+        User user = db.findUserByUsername(username);
+
+        String uuidStr = UUID.randomUUID().toString().replaceAll("-", "");
+        String defaultPassword = uuidStr.substring(0, 8);
+        String encryptedDefaultPassword = PasswordManagement.encryptPassword(defaultPassword, user.getSalt());
+
+        user.setHashedPassword(encryptedDefaultPassword);
+        return db.updateUser(user);
+    }
+
+    /**
+     * Validates that the provided username and password are not null.
+     * @param username - The username to be validated.
+     * @param password - The password to be validated.
+     * @return - true if both username and password are not null, false otherwise.
+     */
+    private boolean isValidInput(String username, String password) {
+        return username != null && password != null;
+    }
+
+    /**
+     * Updates the password and preferred payment method for a user.
+     * Encrypts the new password with salt and updates the database.
+     * @param username - The username of the user to be updated.
+     * @param newPassword - The new password to be set for the user.
+     * @param newPayment - The new preferred payment method for the user.
+     * @return - true if updated successfully, false otherwise.
+     */
+    public boolean updateUserDetails(String username, String newPassword, String newPayment) {
+        User user = db.findUserByUsername(username);
+        if (user == null) {
+            return false;
+        }
+
+        String encryptedNewPassword = PasswordManagement.encryptPassword(newPassword, user.getSalt());
+        user.setHashedPassword(encryptedNewPassword);
+
+        PaymentPreference paymentPreference = new PaymentPreference(username, newPayment);
+        paymentDb.updatePaymentPreference(paymentPreference);
+
+        return db.updateUser(user);
+    }
+}
+~~~~
+
+~~~1R-src/main/java/experiment/PasswordManagement.java
+package main.java.service;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
+
+public class PasswordManagement {
+    private static final String DEFAULT_HASH_ALGORITHM = "SHA-256";
+    private static int[] passwordStrengthCount = new int[3]; // 0: weak, 1: medium, 2: strong
+    private static final int MASK = 0xff;
+
+    /**
+     * Validates the strength of the given password based on length and character.
+     * Updates the passwordStrengthCount array based on password strength.
+     * @param password - The password to validate.
+     * @return - true if the password is considered strong, false otherwise.
+     */
+    public static boolean checkPasswordStrength(String password) {
+        if (password.length() < 5) {
+            passwordStrengthCount[0] += 1;
+            return false;
+        }
+
+        boolean hasUppercase = false;
+        boolean hasLowercase = false;
+        boolean hasDigit = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) hasUppercase = true;
+            if (Character.isLowerCase(c)) hasLowercase = true;
+            if (Character.isDigit(c)) hasDigit = true;
+        }
+
+        if (hasUppercase && hasLowercase && hasDigit) {
+            passwordStrengthCount[2] += 1;
+        } else if (hasUppercase || hasLowercase || hasDigit) {
+            passwordStrengthCount[1] += 1;
+        } else {
+            passwordStrengthCount[3] += 1;
+        }
+
+        return hasUppercase && hasLowercase && hasDigit;
+    }
+
+    /**
+     * Encrypts the provided password using SHA-256 hashing with a specified salt.
+     * @param password - The plain text password to be encrypted.
+     * @param salt - The salt to be used in the encryption process.
+     * @return - a hashed version of the password combined with the salt.
+     */
+    public static String encryptPassword(String password, String salt) {
+        return hashPasswordWithSalt(password, salt);
+    }
+
+    /**
+     * Processes user credentials to create an authentication token.
+     * Uses custom byte-to-hex conversion with bitwise operations.
+     * @param password - The login password of the user.
+     * @param salt - An additional string for improving token uniqueness.
+     * @return - a processed version of the user credentials for login.
+     */
+    public static String hashPasswordWithSalt(String password, String salt) {
+        StringBuilder sb = new StringBuilder(64);
+        try {
+            MessageDigest md = MessageDigest.getInstance(DEFAULT_HASH_ALGORITHM);
+
+            md.update(salt.getBytes());
+            md.update(password.getBytes());
+
+            byte[] hashedBytes = md.digest();
+
+            for (byte b : hashedBytes) {
+                sb.append(Integer.toHexString(b & MASK));
+            }
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error initializing SHA-256 hashing algorithm.", e);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Generates a random salt which can be combined with a password before hashing.
+     * Uses salting to ensure unique hashes even for identical passwords.
+     * @return - a base64 encoded string representing the generated salt.
+     */
+    public static String generateSalt() {
+        try {
+            SecureRandom random = new SecureRandom();
+            byte[] salt = new byte[16];
+            random.nextBytes(salt);
+            return Base64.getEncoder().encodeToString(salt);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while generating salt.", e);
+        }
+    }
+}
+~~~~

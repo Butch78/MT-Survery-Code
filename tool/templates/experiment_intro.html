@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <!-- Requires jQuery -->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}" type="text/javascript"></script>
+
+    <!-- Requires CodeMirror -->
+    <script src="{{ url_for('static', filename='js/codemirror.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='mode/clike/clike.js') }}" type="text/javascript"></script>
+
+    <!--Links are used for styling, relation is a stylesheet, href specifies the location we are linking to
+     so it points to where the style sheet codemirror.css lies-->
+    <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/codemirror.css') }}"/>
+
+    <!-- Folding CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foldgutter.css')}}" />
+
+    <!-- Folding Scripts -->
+    <script src="{{ url_for('static', filename='js/foldcode.js')}}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/foldgutter.js')}}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/brace-fold.js')}}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/comment-fold.js')}}" type="text/javascript"></script>
+
+    <!-- Requires Mergely -->
+    <script src="{{ url_for('static', filename='js/mergely.js') }}" type="text/javascript"></script>
+    <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/mergely.css') }}"/>
+
+    <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/experiment.css') }}"/>
+    <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/timer.css') }}"/>
+
+    <!-- Script for diff production -->
+    <script src="{{ url_for('static', filename='js/experiment_intro.js') }}" type="text/javascript"></script>
+    <style>
+        .lint-error {
+            font-family: arial;
+            font-size: 80%;
+            background: #fcfa96;
+            color: #a00;
+            padding: 2px 5px 3px;
+            border: 1px solid black;
+        }
+
+        .lint-error-icon {
+            color: white;
+            background-color: red;
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 0 3px;
+            margin-right: 7px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        let advance = false;
+        let remark = false;
+
+        function setCookie(cname, cvalue) {
+            document.cookie = cname + "=" + cvalue + ";path=/";
+        }
+
+        function remarkSet() {
+            remark = true;
+        }
+
+        if (history.state !== null && +history.state < history.length) {
+            history.replaceState(null, "", window.location.href);
+        } else {
+            history.replaceState(history.length, "", window.location.href);
+        }
+
+        {#function checkChecklist() {
+            if (remark === false) {
+                document.getElementById('warning').innerHTML = "You have not added any review comment yet. Do you want to complete the review anyway?";
+            }
+            else {
+                document.getElementById('warning').innerHTML = "Do you want to complete the review?";
+            }
+        }#}
+
+        $(document).ready(function () {
+            logData("pageLoaded - fibo", "pageLoaded - fibo");
+
+            console.log("advance: ", advance)
+            {#document.getElementById('div-mergely').scrollIntoView({behavior: 'smooth'});#}
+
+            $('#submitter').click(function (event) {
+                advance = true;
+            });
+
+            var width = $(window).width() - 50;
+
+            // the next line with the % is part of Django, so all items within the loop are parsed by Django to HTML
+            // codes is declared in run.py
+            {% for code in codes %}
+                // functions of experiment.js:
+                initMergely('#compare{{code["id"]}}',
+                    parseInt('{{code["linecount"]}}') * 18.5 + 17,
+                    parseInt('{{code["contextLineCount"]}}') * 18.5,
+                    width,
+                    parseInt('{{code["left_line_number"]}}'),
+                    '{{code["left_content"] | safe}}',
+                    parseInt('{{code["right_line_number"]}}'),
+                    '{{code["right_content"] | safe}}',
+                    '{{code["prefix_line_count"]}}',
+                    '{{code["prefix_escaped"]}}',
+                    '{{code["suffix_escaped"]}}');
+            {% endfor %}
+
+            if ('{{ is_primed }}' == 'True') {
+                var instance = $("#compare0").mergely('cm', 'rhs');
+                var msg = document.createElement("div");
+                var icon = msg.appendChild(document.createElement("span"));
+                icon.innerHTML = "!!";
+                icon.className = "lint-error-icon";
+            }
+
+            // logic when the "I want to start review button is pressed"
+            // $ is used as literate for button-continue which is seeded within a string
+            $("#button-continue").click(function () {
+                advance = true;
+                {#$("#div-mergely").show();#}
+                $("#button-continue").hide();
+                {#$('#checklist-wrapper').show();#}
+                {#document.getElementById('div-mergely').scrollIntoView({behavior: 'smooth'});#}
+
+                // function of experiment.js:
+                logData("read_instructions", "read_instructions");
+
+            })
+        });
+
+
+        window.addEventListener('beforeunload', function (e) {
+            if (!advance) {
+                e.preventDefault();
+                e.returnValue = '';
+                console.log("Confirmation dialog prevented.");
+            }
+        });
+
+
+    </script>
+
+    <style>
+        li {
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<style>
+    #mergely-splash {
+        display: none !important;
+    }
+</style>
+<body>
+<div class="participant-wrapper">
+    <div class="participant-content2" style="padding-bottom:2px;">
+        <p><h1>Instructions</h1></p>
+
+        <ul id="introductionBody" style="line-height: 30px;">
+            <li>Below you can see an <b>example how the review</b> will look like on the next page</li>
+            <li>Try it out. Add, modify or delete comment. If you feel ready, you can go to the next page</li>
+            <li>The old version of the code is on the left, and the new version is on the right.</li>
+            <li><strong>Review comments</strong></li>
+            <ul>
+                <li>To <strong>add</strong> a review comment, click on the corresponding line number.</li>
+                <li>To <strong>modify/delete</strong> a review comment, click on the corresponding line number again and
+                    modify/delete the <br>comment's text
+                </li>
+            </ul>
+            <li> <b>Note: </b><U>Kindly utilize a laptop or desktop and we recommend to use Chrome browser to conduct this experiment.</U> </li>
+        </ul>
+
+        <div class="mergely-full-screen-8" style="overflow-y: hidden; display: block" id="div-mergely">
+            <div class="{% if checklist == 0 %}mergely-resizer2{% else %}mergely-resizer{% endif %}">
+                {% for code in codes %}
+                    <!--Todo set proper width frame for titles -->
+                    <table style="width:100%">
+                        <tbody>
+                        <tr>
+                            <td style="font-size:15px;">{{ code['filename'] }}</td>
+                            <td style="font-size:15px;">{{ code['filename'] }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!--Adding the Code Body-->
+                    <div id="compare{{ code['id'] }}" class="hunk"></div>
+                    <br/>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <!--Method ="get" means the form-data is sent as URL variable (vs post: Data is sent as HTTP post transaction) -->
+    {% if  group == "ITC" %}
+    <form action="experiment_intro2" method="post" id="button-continue">
+        <input type="hidden" id="submitHidden">
+        <!-- "diff_data" is a fieldset with a textarea inside containing JSON formatted log data. Doing this
+        we do not need to manipulate data in a submission function due Flask post request mechanics-->
+        <fieldset id="diff_data" hidden style="display: none">
+            <textarea name="hidden_log" id="hidden_log"></textarea>
+        </fieldset>
+        {{ md_body|safe }}
+        <br>
+        <button id="submitter" class="button blue" style="height: 50px;">I have read the instructions and I'm ready to start
+            the review ►
+        </button>
+        <br>
+    </form>
+    {% else %}
+    <form action="experiment" method="post" id="button-continue">
+        <input type="hidden" id="submitHidden">
+        <!-- "diff_data" is a fieldset with a textarea inside containing JSON formatted log data. Doing this
+        we do not need to manipulate data in a submission function due Flask post request mechanics-->
+        <fieldset id="diff_data" hidden style="display: none">
+            <textarea name="hidden_log" id="hidden_log"></textarea>
+        </fieldset>
+        {{ md_body|safe }}
+        <br>
+        <button id="submitter" class="button blue" style="height: 50px;">I have read the instructions and I'm ready to start
+            the review ►
+        </button>
+        <br><br>
+    </form>
+    {% endif %}
+</div>
+
+
+<!-- modal to insert remarks for code change -->
+<div id="remark-popup-window" class="modal">
+    <form class="modal-content animate">
+        <div class="imgcontainer">
+            <!--Span is an inline element to change things within the block. The following code defines what happens
+            if the user clicks on the close cross in the top right of the modal
+            &times is the syntax for the multiplication sign X, which is used as close icon in the top right-->
+            <span onclick="document.getElementById('remark-popup-window').style.display='none'" class="close"
+                  title="Close">&times;</span>
+        </div>
+
+        <div class="container-popup">
+            <!--            <label for="uname"><b>Comment</b></label>-->
+            <!--            <input type="text" placeholder="Enter comment" name="uname" required>-->
+            <label><b>Please enter review remark:</b></label>
+            <!-- checks if enter (13) is pressed, if yes, close and continue -->
+            <input type="text" placeholder="Remark" name="remark" onkeypress="return runScript(event)"
+                   id="review-remark" required>
+
+            <br>
+
+            <div class="btn-group" style="text-align: center;">
+                <button type="button" onclick="document.getElementById('remark-popup-window').style.display='none'"
+                        class="button-popup blue">Cancel
+                </button>
+                <button type="button"
+                        onclick="document.getElementById('remark-popup-window').style.display='none'; recordRemark(); remarkSet()"
+                        class="button-popup blue">Ok
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function runScript(e) {
+        //See notes about 'which' and 'key'
+        if (e.keyCode == 13) {
+            document.getElementById('remark-popup-window').style.display = 'none';
+            //this is a function in experiment.js experiment2.js
+            remarkSet()
+            recordRemark()
+        }
+    }
+</script>
+
+<style type="text/css">
+    #dialog {
+        width: 200px;
+        margin: auto;
+        padding: 10px;
+        border: thin solid black;
+        background: lightgreen;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+</body>
+</html>

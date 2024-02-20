@@ -1,0 +1,8 @@
+[2024-02-19 21:59:41 +0000] [12296] [INFO] Starting gunicorn 21.2.0
+[2024-02-19 21:59:41 +0000] [12296] [INFO] Listening at: http://0.0.0.0:4000 (12296)
+[2024-02-19 21:59:41 +0000] [12296] [INFO] Using worker: sync
+[2024-02-19 21:59:41 +0000] [12323] [INFO] Booting worker with pid: 12323
+[2024-02-19 22:06:22 +0000] [12296] [INFO] Handling signal: hup
+[2024-02-19 22:06:22 +0000] [12296] [INFO] Hang up: Master
+[2024-02-19 22:06:22 +0000] [12296] [ERROR] Worker (pid:12323) was sent SIGHUP!
+[2024-02-19 22:06:22 +0000] [14026] [INFO] Booting worker with pid: 14026

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <!-- Requires jQuery -->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}" type="text/javascript"></script>
+
+    <!-- Requires CodeMirror -->
+    <script src="{{ url_for('static', filename='js/codemirror.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='mode/clike/clike.js') }}" type="text/javascript"></script>
+
+    <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/codemirror.css') }}"/>
+
+    <!-- Requires Mergely -->
+    <script src="{{ url_for('static', filename='js/mergely.js') }}" type="text/javascript"></script>
+    <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/mergely.css') }}"/>
+
+    <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/style.css') }}"/>
+
+    <!-- Script for diff production -->
+    <script src="{{ url_for('static', filename='js/experiment-final.js') }}" type="text/javascript"></script>
+    <style>
+        .lint-error {
+            font-family: arial;
+            font-size: 80%;
+            background: #fcfa96;
+            color: #a00;
+            padding: 2px 5px 3px;
+            border: 1px solid black;
+        }
+
+        .lint-error-icon {
+            color: white;
+            background-color: red;
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 0 3px;
+            margin-right: 7px;
+        }
+    </style>
+    <script type="text/javascript">
+        let advance = false;
+
+        // console.log(document.cookie);
+
+        {#function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }#}
+
+        {#function getCookieValue(val) {
+            let value = getCookie(val);
+            if (value !== "") {
+                return value;
+            } else {
+                return "";
+            }
+        }#}
+
+        {#getCookieValue();#}
+
+        function advancePage() {
+            advance = true;
+        }
+
+        $(document).ready(function () {
+            if ('{{ is_primed }}' == 'True') {
+                $("#prev-reviewer-comment").show()
+            }
+
+
+            {#logData("pageLoaded", "pageLoaded");#}
+
+            $("#div-mergely").show();
+            $("#button-edit").hide();
+            {#logData("read_instructions", "read_instructions");#}
+            var width = $(window).width() - 50;
+            {% for code in codes %}
+                initMergely('#compare{{code["id"]}}',
+                    parseInt('{{code["linecount"]}}') * 18.5 + 17,
+                    parseInt('{{code["contextLineCount"]}}') * 18.5,
+                    width,
+                    parseInt('{{code["left_line_number"]}}'),
+                    '{{code["left_content"] | safe}}',
+                    parseInt('{{code["right_line_number"]}}'),
+                    '{{code["right_content"] | safe}}',
+                    '{{code["prefix_line_count"]}}',
+                    '{{code["prefix_escaped"]}}',
+                    '{{code["suffix_escaped"]}}');
+            {% endfor %}
+
+            var instance = $("#compare1").mergely('cm', 'rhs');
+            var msg = document.createElement("div");
+            var icon = msg.appendChild(document.createElement("span"));
+            icon.innerHTML = "!!";
+            icon.className = "lint-error-icon";
+            var name = msg.appendChild(document.createElement("span"))
+            msg.className = "lint-error";
+
+            name.innerHTML = "<b>CWE-787 - 'Out-of-bounds' Write: </b>";
+            msg.appendChild(document.createTextNode("In the 'checkPasswordStrength()' function, an attempt to write to  " +
+                " 'passwordStrengthCount[3]' will result in an 'out-of-bounds' write," +
+                " since the array's length is less than 4."));
+            instance.addLineWidget(37, msg, {coverGutter: true, noHScroll: true});
+
+            var instance = $("#compare1").mergely('cm', 'rhs');
+            var msg = document.createElement("div");
+            var icon = msg.appendChild(document.createElement("span"));
+            icon.innerHTML = "!!";
+            icon.className = "lint-error-icon";
+            var name = msg.appendChild(document.createElement("span"))
+            msg.className = "lint-error";
+
+            name.innerHTML = "<b>Code Smell - Wrong Documentation: </b>";
+            msg.appendChild(document.createTextNode("The documentation inaccurately describes the method as creating an 'authentication token' " +
+                " when it's actually hashing a password with a salt. Additionally, references to 'token uniqueness' are misleading," +
+                " as the primary purpose of the salt is to ensure different hashes for identical passwords, not to make a 'token' unique."));
+            instance.addLineWidget(61, msg, {coverGutter: true, noHScroll: true});
+
+            /*name.innerHTML = "<b>CWE-89: Second order SQL Injection: </b>";
+            msg.appendChild(document.createTextNode("The dynamic query in Line 34 is based on the username, which itself " +
+                "is fetched from the database and has no guarantee of being a sanitized, validated user input. Thus, " +
+                "if the username where to be for example YYY' OR username='John then the attacker would be able" +
+                "to access the social security number of the user John, assuming YYY does not currently exists in the DB"));
+            instance.addLineWidget(32, msg, {coverGutter: true, noHScroll: true});*/
+
+
+            var instance = $("#compare0").mergely('cm', 'rhs');
+            var msg = document.createElement("div");
+            var icon = msg.appendChild(document.createElement("span"));
+            icon.innerHTML = "!!";
+            icon.className = "lint-error-icon";
+            var name = msg.appendChild(document.createElement("span"))
+            msg.className = "lint-error";
+
+            name.innerHTML = "<b>Code Smell - Bad Variable Naming: </b>";
+            msg.appendChild(document.createTextNode("The method name 'process' is too generic and doesn't provide enough context about what the method does." +
+                " 'u' and 'p' are excessively abbreviated versions of 'username' and 'password' which makes the parameter names less meaningful."));
+            instance.addLineWidget(23, msg, {coverGutter: true, noHScroll: true});
+
+            var instance = $("#compare0").mergely('cm', 'rhs');
+            var msg = document.createElement("div");
+            var icon = msg.appendChild(document.createElement("span"));
+            icon.innerHTML = "!!";
+            icon.className = "lint-error-icon";
+            var name = msg.appendChild(document.createElement("span"))
+            msg.className = "lint-error";
+
+            name.innerHTML = "<b>CWE-476 - NULL Pointer Dereference: </b>";
+            msg.appendChild(document.createTextNode("If the username does not exist, " +
+                " then the user variable will be 'null' and the 'user.getSalt()' method will throw an NullPointerException (NPE)." +
+                " It should be checked if the user exist like in the method above 'process'."));
+            instance.addLineWidget(55, msg, {coverGutter: true, noHScroll: true});
+
+            var instance = $("#compare0").mergely('cm', 'rhs');
+            var msg = document.createElement("div");
+            var icon = msg.appendChild(document.createElement("span"));
+            icon.innerHTML = "!!";
+            icon.className = "lint-error-icon";
+            var name = msg.appendChild(document.createElement("span"))
+            msg.className = "lint-error";
+
+            name.innerHTML = "<b>Code Smell - Divergent Change: </b>";
+            msg.appendChild(document.createTextNode("This method updates both the user's password and their preferred payment method. " +
+                " This is an example of divergent change as the method does two distinct tasks. Creating two different methods would be more appropriate here"));
+            instance.addLineWidget(81, msg, {coverGutter: true, noHScroll: true});
+
+
+            document.getElementsByName("1st_functional").forEach(function (item) {
+                    item.required = true;
+            });
+
+            document.getElementsByName("2nd_functional").forEach(function (item) {
+                item.required = true;
+            });
+
+            document.getElementsByName("1st_non-functional").forEach(function (item) {
+                item.required = true;
+            });
+
+            document.getElementsByName("2nd_non-functional").forEach(function (item) {
+                item.required = true;
+            });
+
+        });
+
+        window.addEventListener('beforeunload', function (e) {
+            if(!advance) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+</head>
+<style>
+    #mergely-splash {
+        display: none !important;
+    }
+</style>
+<body>
+<div>
+    <p>
+    <h1>Code Review - Concluded</h1></p>
+    <p> The code that you just reviewed was affected by two functional and two non-functional defects. In the following you see their details. </p>
+</div>
+
+<div class="mergely-full-screen-8" style="overflow-y: scroll; display: none" id="div-mergely">
+    <div class="mergely-resizer2">
+        <table width="100%">
+            <tbody>
+            <tr>
+                <td width="50%" style="font-size:15px;">{{ codes[0]['filename'] }}</td>
+                <td style="font-size:15px;">{{ codes[0]['filename'] }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="compare{{ codes[0]['id'] }}" class=""></div>
+        <br/>
+    </div>
+
+    <div class="mergely-resizer2">
+        <table width="100%">
+            <tbody>
+            <tr>
+                <td width="50%" style="font-size:15px;">{{ codes[1]['filename'] }}</td>
+                <td style="font-size:15px;">{{ codes[1]['filename'] }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="compare{{ codes[1]['id'] }}" class=""></div>
+        <br/>
+    </div>
+
+    <div style="clear: both;">
+        <form action="survey" method="post" id="current_form">
+
+            <fieldset id="fieldset_question_1" class="container_radio_buttons" style="display: block;"><p>During your review, did you find
+                the functional bug <b> CWE-476 (NULL Pointer Dereference) </b>?</p>
+                <label><input type="radio" name="1st_functional" id="1st_functional_found_yes" value="0" class="option-input radio" required="true">Yes</label><br>
+                <label><input type="radio" name="1st_functional" id="1st_functional_found_no" value="1" class="option-input radio" required="true">No</label><br>
+            </fieldset>
+
+            <fieldset id="fieldset_question_1a" class="container_radio_buttons" style="display: none;"><p>What was the <b> reason </b> why you did not find the functional bug CWE-476 (NULL Pointer Dereference)?</p>
+                <label><textarea id="reason_1st_functional_bug"
+                                 name="reason_1st_functional_bug"></textarea></label>
+            </fieldset>
+
+
+
+            <fieldset id="fieldset_question_2" class="container_radio_buttons" style="display: block;"><p>During your review, did you find
+                the functional bug <b> CWE-787 ('Out-of-bounds' Write) </b>?</p>
+                <label><input type="radio" name="2nd_functional" id="2nd_functional_found_yes" value="0" class="option-input radio" required="true">Yes</label><br>
+                <label><input type="radio" name="2nd_functional" id="2nd_functional_found_no" value="1" class="option-input radio" required="true">No</label><br>
+            </fieldset>
+
+            <fieldset id="fieldset_question_2a" class="container_radio_buttons" style="display: none;"><p>What was the <b> reason </b> why you did not find the 2nd functional bug CWE-787 ('Out-of-bounds' Write)?</p>
+                <label><textarea id="reason_2nd_functional_bug"
+                                 name="reason_2nd_functional_bug"></textarea></label>
+            </fieldset>
+
+
+
+            <fieldset id="fieldset_question_3" class="container_radio_buttons" style="display: block;"><p>During your review, did you find
+                the code smell <b> bad variable naming </b>?</p>
+                <label><input type="radio" name="1st_non-functional" id="1st_non-functional_found_yes" value="0" class="option-input radio" required="true">Yes</label><br>
+                <label><input type="radio" name="1st_non-functional" id="1st_non-functional_found_no" value="1" class="option-input radio" required="true">No</label><br>
+            </fieldset>
+
+            <fieldset id="fieldset_question_3a" class="container_radio_buttons" style="display: none;"><p>What was the <b> reason </b> why you did not find the code smell (bad variable naming)?</p>
+                <label><textarea id="reason_1st_non-functional_bug"
+                                 name="reason_1st_non-functional_bug"></textarea></label>
+            </fieldset>
+
+
+
+            <fieldset id="fieldset_question_4" class="container_radio_buttons" style="display: block;"><p>During your review, did you find
+                the code smell <b> divergent change </b>?</p>
+                <label><input type="radio" name="2nd_non-functional" id="2nd_non-functional_found_yes" value="0" class="option-input radio" required="true">Yes</label><br>
+                <label><input type="radio" name="2nd_non-functional" id="2nd_non-functional_found_no" value="1" class="option-input radio" required="true">No</label><br>
+            </fieldset>
+
+            <fieldset id="fieldset_question_4a" class="container_radio_buttons" style="display: none;"><p>What was the <b> reason </b> why you did not find the code smell (divergent change)?</p>
+                <label><textarea id="reason_2nd_non-functional_bug"
+                                 name="reason_2nd_non-functional_bug"></textarea></label>
+            </fieldset>
+
+
+            <fieldset id="fieldset_question_5" class="container_radio_buttons" style="display: block;"><p>During your review, did you find
+                the code smell <b> wrong documentation </b>?</p>
+                <label><input type="radio" name="3rd_non-functional" id="3rd_non-functional_found_yes" value="0" class="option-input radio" required="true">Yes</label><br>
+                <label><input type="radio" name="3rd_non-functional" id="3rd_non-functional_found_no" value="1" class="option-input radio" required="true">No</label><br>
+            </fieldset>
+
+            <fieldset id="fieldset_question_5a" class="container_radio_buttons" style="display: none;"><p>What was the <b> reason </b> why you did not find the 3rd non-functional bug (wrong documentation)?</p>
+                <label><textarea id="reason_3rd_non-functional_bug"
+                                 name="reason_3rd_non-functional_bug"></textarea></label>
+            </fieldset>
+
+           <script>
+
+               document.getElementById("1st_functional_found_yes").addEventListener("change", function () {
+                   document.getElementById("fieldset_question_1a").setAttribute("style", "display: none;");
+               });
+
+               document.getElementById("1st_functional_found_no").addEventListener("change", function () {
+                   document.getElementById("fieldset_question_1a").setAttribute("style", "display: block;");
+               });
+
+
+               document.getElementById("2nd_functional_found_yes").addEventListener("change", function () {
+                   document.getElementById("fieldset_question_2a").setAttribute("style", "display: none;");
+               });
+
+               document.getElementById("2nd_functional_found_no").addEventListener("change", function () {
+                   document.getElementById("fieldset_question_2a").setAttribute("style", "display: block;");
+               });
+
+
+               document.getElementById("1st_non-functional_found_yes").addEventListener("change", function () {
+                   document.getElementById("fieldset_question_3a").setAttribute("style", "display: none;");
+               });
+
+               document.getElementById("1st_non-functional_found_no").addEventListener("change", function () {
+                   document.getElementById("fieldset_question_3a").setAttribute("style", "display: block;");
+               });
+
+
+               document.getElementById("2nd_non-functional_found_yes").addEventListener("change", function () {
+                   document.getElementById("fieldset_question_4a").setAttribute("style", "display: none;");
+               });
+
+               document.getElementById("2nd_non-functional_found_no").addEventListener("change", function () {
+                   document.getElementById("fieldset_question_4a").setAttribute("style", "display: block;");
+               });
+
+
+               document.getElementById("3rd_non-functional_found_yes").addEventListener("change", function () {
+                   document.getElementById("fieldset_question_5a").setAttribute("style", "display: none;");
+               });
+
+               document.getElementById("3rd_non-functional_found_no").addEventListener("change", function () {
+                   document.getElementById("fieldset_question_5a").setAttribute("style", "display: block;");
+               });
+
+           </script>
+
+           <button type="submit" id="submitter" onclick="advancePage()" class="button blue">Next</button>
+       </form>
+   </div>
+</div>
+</body>
+</html>

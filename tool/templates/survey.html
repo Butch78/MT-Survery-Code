@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+            <title>{{title}}</title>
+            <!-- Requires jQuery -->
+            <script src="{{ url_for('static', filename='js/jquery.min.js')}}" type="text/javascript"></script>
+
+            <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/style.css')}}" />
+            <script>
+                if (history.state !== null && +history.state < history.length) {
+                    history.replaceState(null, "", window.location.href);
+                } else {
+                    history.replaceState(history.length, "", window.location.href);
+                }
+                    $(document).ready(function(){
+                        var form = document.getElementById('current_form');
+                        if (form.attachEvent) {
+                            form.attachEvent("submit", processForm);
+                        } else {
+                            form.addEventListener("submit", processForm);
+                        }
+                    });
+                function processForm() {
+                    var ta0 = document.getElementById("qgendertext");
+                    var ta2 = document.getElementById("q2text");
+                    if (ta0.value !== undefined) {
+                        var other = document.getElementById("qgendera2");
+                        $(other).val(ta0.value)
+                    }
+                    if (ta2.value !== undefined) {
+                        other = document.getElementById("q2a9");
+                        $(other).val(ta2.value)
+                    }
+                }
+            </script>
+    </head>
+    <body>
+        <section class="content">
+            <h2>Time Constraints during Code Review</h2>
+
+            <p> This experiment is about time constraints and code review.
+                In the following, we will ask you some questions about <strong>the task and time constraint</strong> before concluding the experiment.</p>
+            <p style="margin-bottom: 40px"> Let us kindly remind you that your answers are anonymized and cannot be traced back to you.</p>
+
+            <!--<p><strong>Please answer the following questions before continuing the experiment:</strong></p> --->
+            <form action="dem_questions" onsubmit="return validateCheckboxes()" method="post" id="current_form">
+
+                <fieldset id="fieldset_question_5" class="container_radio_buttons">
+                    <p style="margin-bottom: 10px">How long have you been interrupted during the execution of the review?</p>
+                    <label><input type="radio" name="question_interruption_time" id="question_interruption_time_a0"
+                                  value="0" class="option-input radio" required>No interruption time</label><br>
+                    <label><input type="radio" name="question_interruption_time" id="question_interruption_time_a1"
+                                  value="1" class="option-input radio">1-2 minutes</label><br>
+                    <label><input type="radio" name="question_interruption_time" id="question_interruption_time_a2"
+                                  value="2" class="option-input radio">up to 5 minutes</label><br>
+                    <label><input type="radio" name="question_interruption_time" id="question_interruption_time_a3"
+                                  value="3" class="option-input radio">up to 10 minutes</label><br>
+                    <label><input type="radio" name="question_interruption_time" id="question_interruption_time_a4"
+                                  value="4" class="option-input radio">more than 10 minutes</label><br>
+                </fieldset>
+
+                <fieldset id="fieldset_question_sec1" class="container"><p>Specify your agreement with the following statements about the <strong>perceived effects of the task</strong>:</p>
+                    <table class="striped-columns border">
+                        <tbody>
+                            <tr bgcolor="#FFFFFF">
+                                <th class="question"></th>
+                                <th class="option" >Very Low</th>
+                                <th class="option">Low</th>
+                                <th class="option">Moderate</th>
+                                <th class="option">High</th>
+                                <th class="option">Very High </th>
+                                <th class="option">I don't know</th>
+                                <th class="option">Not Applicable</th>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="workload_1">How mentally demanding was the task (e.g., thinking, deciding, calculating, remembering, looking, searching, etc.)?</td>
+                                <td><label for="workload_1_1"><input type="radio" value="1" name="mentally" id="workload_1_1" required="true"/></label></td>
+                                <td><label for="workload_1_2"><input type="radio" value="2" name="mentally" id="workload_1_2" required="true"/></label></td>
+                                <td><label for="workload_1_3"><input type="radio" value="3" name="mentally" id="workload_1_3" required="true"/></label></td>
+                                <td><label for="workload_1_4"><input type="radio" value="4" name="mentally" id="workload_1_4" required="true"/></label></td>
+                                <td><label for="workload_1_5"><input type="radio" value="5" name="mentally" id="workload_1_5" required="true"/></label></td>
+                                <td class="outlined"><label for="workload_1_6"><input type="radio" value="6" name="mentally" id="workload_1_6" required="true"/></label></td>
+                                <td><label for="workload_1_7"><input type="radio" value="7" name="mentally" id="workload_1_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="workload_2">How physically demanding was the task?</td>
+                                <td><label for="workload_2_1"><input type="radio" value="1" name="physically" id="workload_2_1" required="true"/></label></td>
+                                <td><label for="workload_2_2"><input type="radio" value="2" name="physically" id="workload_2_2" required="true"/></label></td>
+                                <td><label for="workload_2_3"><input type="radio" value="3" name="physically" id="workload_2_3" required="true"/></label></td>
+                                <td><label for="workload_2_4"><input type="radio" value="4" name="physically" id="workload_2_4" required="true"/></label></td>
+                                <td><label for="workload_2_5"><input type="radio" value="5" name="physically" id="workload_2_5" required="true"/></label></td>
+                                <td class="outlined"><label for="workload_2_6"><input type="radio" value="6" name="physically" id="workload_2_6" required="true"/></label></td>
+                                <td><label for="workload_2_7"><input type="radio" value="7" name="physically" id="workload_2_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="workload_2">How much time pressure did you feel due to the rate or pace at which the tasks or task elements occurred?</td>
+                                <td><label for="workload_3_1"><input type="radio" value="1" name="temporal" id="workload_3_1" required="true"/></label></td>
+                                <td><label for="workload_3_2"><input type="radio" value="2" name="temporal" id="workload_3_2" required="true"/></label></td>
+                                <td><label for="workload_3_3"><input type="radio" value="3" name="temporal" id="workload_3_3" required="true"/></label></td>
+                                <td><label for="workload_3_4"><input type="radio" value="4" name="temporal" id="workload_3_4" required="true"/></label></td>
+                                <td><label for="workload_3_5"><input type="radio" value="5" name="temporal" id="workload_3_5" required="true"/></label></td>
+                                <td class="outlined"><label for="workload_6_6"><input type="radio" value="6" name="temporal" id="workload_3_6" required="true"/></label></td>
+                                <td><label for="workload_3_7"><input type="radio" value="7" name="temporal" id="workload_3_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="workload_3">How successful were you in accomplishing the task objectives?</td>
+                                <td><label for="workload_4_1"><input type="radio" value="1" name="performance" id="workload_4_1" required="true"/></label></td>
+                                <td><label for="workload_4_2"><input type="radio" value="2" name="performance" id="workload_4_2" required="true"/></label></td>
+                                <td><label for="workload_4_3"><input type="radio" value="3" name="performance" id="workload_4_3" required="true"/></label></td>
+                                <td><label for="workload_4_4"><input type="radio" value="4" name="performance" id="workload_4_4" required="true"/></label></td>
+                                <td><label for="workload_4_5"><input type="radio" value="5" name="performance" id="workload_4_5" required="true"/></label></td>
+                                <td class="outlined"><label for="workload_4_6"><input type="radio" value="6" name="performance" id="workload_4_6" required="true"/></label></td>
+                                <td><label for="workload_4_7"><input type="radio" value="7" name="performance" id="workload_4_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="workload_4">How hard did you have to work to accomplish your level of performance?</td>
+                                <td><label for="workload_5_1"><input type="radio" value="1" name="effort" id="workload_5_1" required="true"/></label></td>
+                                <td><label for="workload_5_2"><input type="radio" value="2" name="effort" id="workload_5_2" required="true"/></label></td>
+                                <td><label for="workload_5_3"><input type="radio" value="3" name="effort" id="workload_5_3" required="true"/></label></td>
+                                <td><label for="workload_5_4"><input type="radio" value="4" name="effort" id="workload_5_4" required="true"/></label></td>
+                                <td><label for="workload_5_5"><input type="radio" value="5" name="effort" id="workload_5_5" required="true"/></label></td>
+                                <td class="outlined"><label for="workload_5_6"><input type="radio" value="6" name="effort" id="workload_5_6" required="true"/></label></td>
+                                <td><label for="workload_5_7"><input type="radio" value="7" name="effort" id="workload_5_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="workload_5">How insecure, discouraged, irritated, stressed, and annoyed were you?</td>
+                                <td><label for="workload_6_1"><input type="radio" value="1" name="frustration" id="workload_6_1" required="true"/></label></td>
+                                <td><label for="workload_6_2"><input type="radio" value="2" name="frustration" id="workload_6_2" required="true"/></label></td>
+                                <td><label for="workload_6_3"><input type="radio" value="3" name="frustration" id="workload_6_3" required="true"/></label></td>
+                                <td><label for="workload_6_4"><input type="radio" value="4" name="frustration" id="workload_6_4" required="true"/></label></td>
+                                <td><label for="workload_6_5"><input type="radio" value="5" name="frustration" id="workload_6_5" required="true"/></label></td>
+                                <td class="outlined"><label for="workload_6_6"><input type="radio" value="6" name="frustration" id="workload_6_6" required="true"/></label></td>
+                                <td><label for="workload_6_7"><input type="radio" value="7" name="frustration" id="workload_6_7" required="true"/></label></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </fieldset>
+
+                <fieldset id="fieldset_question_sec3" class="container_radio_buttons"><p>Please rate your experience with <b> time pressure </b> during the task using the following scale:</p>
+                    <table class="striped-columns border">
+                        <tbody>
+                        <tr>
+                            <th class="question"></th>
+                            <th class="option" >Not at all</th>
+                            <th class="option">Slightly</th>
+                            <th class="option">Moderately</th>
+                            <th class="option">Significantly</th>
+                            <th class="option">Extremely</th>
+                            <th class="option">I don't know</th>
+                            <th class="option">Not Applicable</th>
+                        </tr>
+
+                        <tr>
+                            <td width="580" class="question" id="timeConstraint_1">How often did you feel time pressure during the task?</td>
+                            <td><label for="timeConstraint_1_1"><input type="radio" value="1" name="encounter" id="timeConstraint_1_1" required="true"/></label></td>
+                            <td><label for="timeConstraint_1_2"><input type="radio" value="2" name="encounter" id="timeConstraint_1_2" required="true"/></label></td>
+                            <td><label for="timeConstraint_1_3"><input type="radio" value="3" name="encounter" id="timeConstraint_1_3" required="true"/></label></td>
+                            <td><label for="timeConstraint_1_4"><input type="radio" value="4" name="encounter" id="timeConstraint_1_4" required="true"/></label></td>
+                            <td><label for="timeConstraint_1_5"><input type="radio" value="5" name="encounter" id="timeConstraint_1_5" required="true"/></label></td>
+                            <td class="outlined"><label for="timeConstraint_1_6"><input type="radio" value="6" name="encounter" id="timeConstraint_1_6" required="true"/></label></td>
+                            <td><label for="timeConstraint_1_7"><input type="radio" value="7" name="encounter" id="timeConstraint_1_7" required="true"/></label></td>
+                        </tr>
+
+                        <tr>
+                            <td width="580" class="question" id="timeConstraint_2">Did you frequently find yourself checking the time or feeling anxious about meeting the time constraint during the task?</td>
+                            <td><label for="timeConstraint_2_1"><input type="radio" value="1" name="quick" id="timeConstraint_2_1" required="true"/></label></td>
+                            <td><label for="timeConstraint_2_2"><input type="radio" value="2" name="quick" id="timeConstraint_2_2" required="true"/></label></td>
+                            <td><label for="timeConstraint_2_3"><input type="radio" value="3" name="quick" id="timeConstraint_2_3" required="true"/></label></td>
+                            <td><label for="timeConstraint_2_4"><input type="radio" value="4" name="quick" id="timeConstraint_2_4" required="true"/></label></td>
+                            <td><label for="timeConstraint_2_5"><input type="radio" value="5" name="quick" id="timeConstraint_2_5" required="true"/></label></td>
+                            <td class="outlined"><label for="timeConstraint_2_6"><input type="radio" value="6" name="quick" id="timeConstraint_2_6" required="true"/></label></td>
+                            <td><label for="timeConstraint_2_7"><input type="radio" value="7" name="quick" id="timeConstraint_2_7" required="true"/></label></td>
+                        </tr>
+                        <tr>
+                            <td width="580" class="question" id="timeConstraint_3">I felt rushed due to time constraints during the task.</td>
+                            <td><label for="timeConstraint_3_1"><input type="radio" value="1" name="prioritize" id="timeConstraint_3_1" required="true"/></label></td>
+                            <td><label for="timeConstraint_3_2"><input type="radio" value="2" name="prioritize" id="timeConstraint_3_2" required="true"/></label></td>
+                            <td><label for="timeConstraint_3_3"><input type="radio" value="3" name="prioritize" id="timeConstraint_3_3" required="true"/></label></td>
+                            <td><label for="timeConstraint_3_4"><input type="radio" value="4" name="prioritize" id="timeConstraint_3_4" required="true"/></label></td>
+                            <td><label for="timeConstraint_3_5"><input type="radio" value="5" name="prioritize" id="timeConstraint_3_5" required="true"/></label></td>
+                            <td class="outlined"><label for="timeConstraint_3_6"><input type="radio" value="6" name="prioritize" id="timeConstraint_3_6" required="true"/></label></td>
+                            <td><label for="timeConstraint_3_7"><input type="radio" value="7" name="prioritize" id="timeConstraint_3_7" required="true"/></label></td>
+                        </tr>
+
+                        {#<tr>
+                            <td width="580" class="question" id="timeConstraint_4">I had sufficient time to complete the task.</td>
+                            <td><label for="timeConstraint_4_1"><input type="radio" value="1" name="quality" id="timeConstraint_4_1" required="true"/></label></td>
+                            <td><label for="timeConstraint_4_2"><input type="radio" value="2" name="quality" id="timeConstraint_4_2" required="true"/></label></td>
+                            <td><label for="timeConstraint_4_3"><input type="radio" value="3" name="quality" id="timeConstraint_4_3" required="true"/></label></td>
+                            <td><label for="timeConstraint_4_4"><input type="radio" value="4" name="quality" id="timeConstraint_4_4" required="true"/></label></td>
+                            <td><label for="timeConstraint_4_5"><input type="radio" value="5" name="quality" id="timeConstraint_4_5" required="true"/></label></td>
+                            <td class="outlined"><label for="timeConstraint_4_6"><input type="radio" value="6" name="quality" id="timeConstraint_4_6" required="true"/></label></td>
+                            <td><label for="timeConstraint_4_7"><input type="radio" value="7" name="quality" id="timeConstraint_4_7" required="true"/></label></td>
+                        </tr>
+
+                        <tr>
+                            <td class="question" id="timeConstraint_5">The available time allowed me to work comfortably.</td>
+                            <td><label for="timeConstraint_5_1"><input type="radio" value="1" name="setTime" id="timeConstraint_5_1" required="true"/></label></td>
+                            <td><label for="timeConstraint_5_2"><input type="radio" value="2" name="setTime" id="timeConstraint_5_2" required="true"/></label></td>
+                            <td><label for="timeConstraint_5_3"><input type="radio" value="3" name="setTime" id="timeConstraint_5_3" required="true"/></label></td>
+                            <td><label for="timeConstraint_5_4"><input type="radio" value="4" name="setTime" id="timeConstraint_5_4" required="true"/></label></td>
+                            <td><label for="timeConstraint_5_5"><input type="radio" value="5" name="setTime" id="timeConstraint_5_5" required="true"/></label></td>
+                            <td class="outlined"><label for="timeConstraint_5_6"><input type="radio" value="6" name="setTime" id="timeConstraint_5_6" required="true"/></label></td>
+                            <td><label for="timeConstraint_5_7"><input type="radio" value="7" name="setTime" id="timeConstraint_5_7" required="true"/></label></td>
+                        </tr>
+
+                        <tr>
+                            <td width="580" class="question" id="timeConstraint_6">The task's time requirements were manageable.</td>
+                            <td><label for="timeConstraint_6_1"><input type="radio" value="1" name="externalFactors" id="timeConstraint_6_1" required="true"/></label></td>
+                            <td><label for="timeConstraint_6_2"><input type="radio" value="2" name="externalFactors" id="timeConstraint_6_2" required="true"/></label></td>
+                            <td><label for="timeConstraint_6_3"><input type="radio" value="3" name="externalFactors" id="timeConstraint_6_3" required="true"/></label></td>
+                            <td><label for="timeConstraint_6_4"><input type="radio" value="4" name="externalFactors" id="timeConstraint_6_4" required="true"/></label></td>
+                            <td><label for="timeConstraint_6_5"><input type="radio" value="5" name="externalFactors" id="timeConstraint_6_5" required="true"/></label></td>
+                            <td class="outlined"><label for="timeConstraint_6_6"><input type="radio" value="6" name="externalFactors" id="timeConstraint_6_6" required="true"/></label></td>
+                            <td><label for="timeConstraint_6_7"><input type="radio" value="7" name="externalFactors" id="timeConstraint_6_7" required="true"/></label></td>
+                        </tr>#}
+                        </tbody>
+                    </table>
+                </fieldset>
+
+                <fieldset id="fieldset_question_sec4" class="container_radio_buttons"><p>Please rate your experience considering your <b>motivation and task difficulty</b> during the task using the following scale:</p>
+                    <table class="striped-columns border">
+                        <tbody>
+                        <tr>
+                            <th class="question"></th>
+                            <th class="option">Strongly Disagree</th>
+                            <th class="option">Disagree</th>
+                            <th class="option">Neutral</th>
+                            <th class="option">Agree</th>
+                            <th class="option">Strongly Agree</th>
+                            <th class="option">I don't know</th>
+                            <th class="option">Not Applicable</th>
+                        </tr>
+
+                        <tr>
+                            <td width="580" class="question" id="motivation_1">I was highly motivated to complete the task.</td>
+                            <td><label for="motivation_1_1"><input type="radio" value="1" name="motivation_codeReview_1" id="motivation_1_1" required="true"/></label></td>
+                            <td><label for="motivation_1_2"><input type="radio" value="2" name="motivation_codeReview_1" id="motivation_1_2" required="true"/></label></td>
+                            <td><label for="motivation_1_3"><input type="radio" value="3" name="motivation_codeReview_1" id="motivation_1_3" required="true"/></label></td>
+                            <td><label for="motivation_1_4"><input type="radio" value="4" name="motivation_codeReview_1" id="motivation_1_4" required="true"/></label></td>
+                            <td><label for="motivation_1_5"><input type="radio" value="5" name="motivation_codeReview_1" id="motivation_1_5" required="true"/></label></td>
+                            <td class="outlined"><label for="motivation_1_6"><input type="radio" value="6" name="motivation_codeReview_1" id="motivation_1_6" required="true"/></label></td>
+                            <td><label for="motivation_1_7"><input type="radio" value="7" name="motivation_codeReview_1" id="motivation_1_7" required="true"/></label></td>
+                        </tr>
+
+                        <tr>
+                            <td class="question" id="motivation_2">To achieve the best possible result in the task was personally important to me.</td>
+                            <td><label for="motivation_2_1"><input type="radio" value="1" name="motivation_codeReview_2" id="motivation_2_1" required="true"/></label></td>
+                            <td><label for="motivation_2_2"><input type="radio" value="2" name="motivation_codeReview_2" id="motivation_2_2" required="true"/></label></td>
+                            <td><label for="motivation_2_3"><input type="radio" value="3" name="motivation_codeReview_2" id="motivation_2_3" required="true"/></label></td>
+                            <td><label for="motivation_2_4"><input type="radio" value="4" name="motivation_codeReview_2" id="motivation_2_4" required="true"/></label></td>
+                            <td><label for="motivation_2_5"><input type="radio" value="5" name="motivation_codeReview_2" id="motivation_2_5" required="true"/></label></td>
+                            <td class="outlined"><label for="motivation_2_6"><input type="radio" value="6" name="motivation_codeReview_2" id="motivation_2_6" required="true"/></label></td>
+                            <td><label for="motivation_2_7"><input type="radio" value="7" name="motivation_codeReview_2" id="motivation_2_7" required="true"/></label></td>
+                        </tr>
+
+                        <tr>
+                            <td width="580" class="question" id="motivation_3">The task was challenging in nature.</td>
+                            <td><label for="motivation_3_1"><input type="radio" value="1" name="difficulty_codeReview_1" id="motivation_3_1" required="true"/></label></td>
+                            <td><label for="motivation_3_2"><input type="radio" value="2" name="difficulty_codeReview_1" id="motivation_3_2" required="true"/></label></td>
+                            <td><label for="motivation_3_3"><input type="radio" value="3" name="difficulty_codeReview_1" id="motivation_3_3" required="true"/></label></td>
+                            <td><label for="motivation_3_4"><input type="radio" value="4" name="difficulty_codeReview_1" id="motivation_3_4" required="true"/></label></td>
+                            <td><label for="motivation_3_5"><input type="radio" value="5" name="difficulty_codeReview_1" id="motivation_3_5" required="true"/></label></td>
+                            <td class="outlined"><label for="motivation_3_6"><input type="radio" value="6" name="difficulty_codeReview_1" id="motivation_3_6" required="true"/></label></td>
+                            <td><label for="motivation_3_7"><input type="radio" value="7" name="difficulty_codeReview_1" id="motivation_3_7" required="true"/></label></td>
+                        </tr>
+                        <tr>
+                            <td width="580" class="question" id="motivation_4">I found the task to be difficult to accomplish.</td>
+                            <td><label for="motivation_4_1"><input type="radio" value="1" name="difficulty_codeReview_2" id="motivation_4_1" required="true"/></label></td>
+                            <td><label for="motivation_4_2"><input type="radio" value="2" name="difficulty_codeReview_2" id="motivation_4_2" required="true"/></label></td>
+                            <td><label for="motivation_4_3"><input type="radio" value="3" name="difficulty_codeReview_2" id="motivation_4_3" required="true"/></label></td>
+                            <td><label for="motivation_4_4"><input type="radio" value="4" name="difficulty_codeReview_2" id="motivation_4_4" required="true"/></label></td>
+                            <td><label for="motivation_4_5"><input type="radio" value="5" name="difficulty_codeReview_2" id="motivation_4_5" required="true"/></label></td>
+                            <td class="outlined"><label for="motivation_4_6"><input type="radio" value="6" name="difficulty_codeReview_2" id="motivation_4_6" required="true"/></label></td>
+                            <td><label for="motivation_4_7"><input type="radio" value="7" name="difficulty_codeReview_2" id="motivation_4_7" required="true"/></label></td>
+                        </tr>
+                        <tr>
+                            <td width="580" class="question" id="motivation_5">My aim was to address as many as possible functional and non-functional issues in the code review, even if it meant making trade-offs in terms of code quality</td>
+                            <td><label for="motivation_5_1"><input type="radio" value="1" name="importance_codeReview_1" id="motivation_5_1" required="true"/></label></td>
+                            <td><label for="motivation_5_2"><input type="radio" value="2" name="importance_codeReview_1" id="motivation_5_2" required="true"/></label></td>
+                            <td><label for="motivation_5_3"><input type="radio" value="3" name="importance_codeReview_1" id="motivation_5_3" required="true"/></label></td>
+                            <td><label for="motivation_5_4"><input type="radio" value="4" name="importance_codeReview_1" id="motivation_5_4" required="true"/></label></td>
+                            <td><label for="motivation_5_5"><input type="radio" value="5" name="importance_codeReview_1" id="motivation_5_5" required="true"/></label></td>
+                            <td class="outlined"><label for="motivation_5_6"><input type="radio" value="6" name="importance_codeReview_1" id="motivation_5_6" required="true"/></label></td>
+                            <td><label for="motivation_5_7"><input type="radio" value="7" name="importance_codeReview_1" id="motivation_5_7" required="true"/></label></td>
+                        </tr>
+
+                        <tr>
+                            <td width="580" class="question" id="motivation_6">I had no interest in performing well in the task.</td>
+                            <td><label for="motivation_6_1"><input type="radio" value="1" name="importance_codeReview_2" id="motivation_6_1" required="true"/></label></td>
+                            <td><label for="motivation_6_2"><input type="radio" value="2" name="importance_codeReview_2" id="motivation_6_2" required="true"/></label></td>
+                            <td><label for="motivation_6_3"><input type="radio" value="3" name="importance_codeReview_2" id="motivation_6_3" required="true"/></label></td>
+                            <td><label for="motivation_6_4"><input type="radio" value="4" name="importance_codeReview_2" id="motivation_6_4" required="true"/></label></td>
+                            <td><label for="motivation_6_5"><input type="radio" value="5" name="importance_codeReview_2" id="motivation_6_5" required="true"/></label></td>
+                            <td class="outlined"><label for="motivation_6_6"><input type="radio" value="6" name="importance_codeReview_2" id="motivation_6_6" required="true"/></label></td>
+                            <td><label for="motivation_6_7"><input type="radio" value="7" name="importance_codeReview_2" id="motivation_6_7" required="true"/></label></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+
+                {#<fieldset id="fieldset_question_sec3" class="container_radio_buttons"><p>Please consider situations where you engage in <strong>code reviews</strong>. We want to understand how frequently time constraints impact your code review experience. </p>
+                    <table class="striped-columns border">
+                        <tbody>
+                            <tr>
+                                <th class="question"></th>
+                                <th class="option" >Rarely</th>
+                                <th class="option">Occasionally</th>
+                                <th class="option">Sometimes</th>
+                                <th class="option">Often</th>
+                                <th class="option">Very Often</th>
+                                <th class="option">I don't know</th>
+                                <th class="option">Not Applicable</th>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="timeConstraint_1">How often do you encounter time constraints during code reviews in your professional or academic activities?</td>
+                                <td><label for="timeConstraint_1_1"><input type="radio" value="1" name="encounter" id="timeConstraint_1_1" required="true"/></label></td>
+                                <td><label for="timeConstraint_1_2"><input type="radio" value="2" name="encounter" id="qsec3_1_2" required="true"/></label></td>
+                                <td><label for="timeConstraint_1_3"><input type="radio" value="3" name="encounter" id="timeConstraint_1_3" required="true"/></label></td>
+                                <td><label for="timeConstraint_1_4"><input type="radio" value="4" name="encounter" id="timeConstraint_1_4" required="true"/></label></td>
+                                <td><label for="timeConstraint_1_5"><input type="radio" value="5" name="encounter" id="timeConstraint_1_5" required="true"/></label></td>
+                                <td class="outlined"><label for="timeConstraint_1_6"><input type="radio" value="6" name="encounter" id="timeConstraint_1_6" required="true"/></label></td>
+                                <td><label for="timeConstraint_1_7"><input type="radio" value="7" name="encounter" id="timeConstraint_1_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="timeConstraint_2">In the context of code reviews, how frequently do you feel the need to make quick decisions due to time constraints?</td>
+                                <td><label for="timeConstraint_2_1"><input type="radio" value="1" name="quick" id="timeConstraint_2_1" required="true"/></label></td>
+                                <td><label for="timeConstraint_2_2"><input type="radio" value="2" name="quick" id="timeConstraint_2_2" required="true"/></label></td>
+                                <td><label for="timeConstraint_2_3"><input type="radio" value="3" name="quick" id="timeConstraint_2_3" required="true"/></label></td>
+                                <td><label for="timeConstraint_2_4"><input type="radio" value="4" name="quick" id="timeConstraint_2_4" required="true"/></label></td>
+                                <td><label for="timeConstraint_2_5"><input type="radio" value="5" name="quick" id="timeConstraint_2_5" required="true"/></label></td>
+                                <td class="outlined"><label for="timeConstraint_2_6"><input type="radio" value="6" name="quick" id="timeConstraint_2_6" required="true"/></label></td>
+                                <td><label for="timeConstraint_2_7"><input type="radio" value="7" name="quick" id="timeConstraint_2_7" required="true"/></label></td>
+                            </tr>
+                            <tr>
+                                <td width="580" class="question" id="timeConstraint_3">How often do you feel pressured to prioritize defect detection over reviewing non-functional aspects of the code (e.g., violating design principles, bad variable naming) when time is limited during code reviews?</td>
+                                <td><label for="timeConstraint_3_1"><input type="radio" value="1" name="prioritize" id="timeConstraint_3_1" required="true"/></label></td>
+                                <td><label for="timeConstraint_3_2"><input type="radio" value="2" name="prioritize" id="timeConstraint_3_2" required="true"/></label></td>
+                                <td><label for="timeConstraint_3_3"><input type="radio" value="3" name="prioritize" id="timeConstraint_3_3" required="true"/></label></td>
+                                <td><label for="timeConstraint_3_4"><input type="radio" value="4" name="prioritize" id="timeConstraint_3_4" required="true"/></label></td>
+                                <td><label for="timeConstraint_3_5"><input type="radio" value="5" name="prioritize" id="timeConstraint_3_5" required="true"/></label></td>
+                                <td class="outlined"><label for="timeConstraint_3_6"><input type="radio" value="6" name="prioritize" id="timeConstraint_3_6" required="true"/></label></td>
+                                <td><label for="timeConstraint_3_7"><input type="radio" value="7" name="prioritize" id="timeConstraint_3_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="timeConstraint_4">During code reviews under time constraints, how often do you think the quality of code review, especially for non-functional defects, is compromised?</td>
+                                <td><label for="timeConstraint_4_1"><input type="radio" value="1" name="quality" id="timeConstraint_4_1" required="true"/></label></td>
+                                <td><label for="timeConstraint_4_2"><input type="radio" value="2" name="quality" id="timeConstraint_4_2" required="true"/></label></td>
+                                <td><label for="timeConstraint_4_3"><input type="radio" value="3" name="quality" id="timeConstraint_4_3" required="true"/></label></td>
+                                <td><label for="timeConstraint_4_4"><input type="radio" value="4" name="quality" id="timeConstraint_4_4" required="true"/></label></td>
+                                <td><label for="timeConstraint_4_5"><input type="radio" value="5" name="quality" id="timeConstraint_4_5" required="true"/></label></td>
+                                <td class="outlined"><label for="timeConstraint_4_6"><input type="radio" value="6" name="quality" id="timeConstraint_4_6" required="true"/></label></td>
+                                <td><label for="timeConstraint_4_7"><input type="radio" value="7" name="quality" id="timeConstraint_4_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="question" id="timeConstraint_5">In your experience, how frequently do you personally set time restrictions on your code reviews (regardless of external factors)?</td>
+                                <td><label for="timeConstraint_5_1"><input type="radio" value="1" name="setTime" id="timeConstraint_5_1" required="true"/></label></td>
+                                <td><label for="timeConstraint_5_2"><input type="radio" value="2" name="setTime" id="timeConstraint_5_2" required="true"/></label></td>
+                                <td><label for="timeConstraint_5_3"><input type="radio" value="3" name="setTime" id="timeConstraint_5_3" required="true"/></label></td>
+                                <td><label for="timeConstraint_5_4"><input type="radio" value="4" name="setTime" id="timeConstraint_5_4" required="true"/></label></td>
+                                <td><label for="timeConstraint_5_5"><input type="radio" value="5" name="setTime" id="timeConstraint_5_5" required="true"/></label></td>
+                                <td class="outlined"><label for="timeConstraint_5_6"><input type="radio" value="6" name="setTime" id="timeConstraint_5_6" required="true"/></label></td>
+                                <td><label for="timeConstraint_5_7"><input type="radio" value="7" name="setTime" id="timeConstraint_5_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="timeConstraint_6">How often do external factors, such as project deadlines, impose time constraints on your code reviews?</td>
+                                <td><label for="timeConstraint_6_1"><input type="radio" value="1" name="externalFactors" id="timeConstraint_6_1" required="true"/></label></td>
+                                <td><label for="timeConstraint_6_2"><input type="radio" value="2" name="externalFactors" id="timeConstraint_6_2" required="true"/></label></td>
+                                <td><label for="timeConstraint_6_3"><input type="radio" value="3" name="externalFactors" id="timeConstraint_6_3" required="true"/></label></td>
+                                <td><label for="timeConstraint_6_4"><input type="radio" value="4" name="externalFactors" id="timeConstraint_6_4" required="true"/></label></td>
+                                <td><label for="timeConstraint_6_5"><input type="radio" value="5" name="externalFactors" id="timeConstraint_6_5" required="true"/></label></td>
+                                <td class="outlined"><label for="timeConstraint_6_6"><input type="radio" value="6" name="externalFactors" id="timeConstraint_6_6" required="true"/></label></td>
+                                <td><label for="timeConstraint_6_7"><input type="radio" value="7" name="externalFactors" id="timeConstraint_6_7" required="true"/></label></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </fieldset>#}
+
+
+               {# <fieldset id="fieldset_question_sec4" class="container_radio_buttons"><p>For each question, please rate your confidence level in dealing with the described situations under <strong>time constraints</strong>.</p>
+                    <table class="striped-columns border">
+                        <tbody>
+                            <tr>
+                                <th class="question"></th>
+                                <th class="option">Not Confident</th>
+                                <th class="option">Slightly Confident</th>
+                                <th class="option">Moderately Confident</th>
+                                <th class="option">Quite Confident</th>
+                                <th class="option">Very Confident</th>
+                                <th class="option">I don't know</th>
+                                <th class="option">Not Applicable</th>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="confidence_level_1">How confident are you in your ability to conduct thorough code reviews when time constraints are present?</td>
+                                <td><label for="confidence_level_1_1"><input type="radio" value="1" name="confidence_codeReview" id="confidence_level_1_1" required="true"/></label></td>
+                                <td><label for="confidence_level_1_2"><input type="radio" value="2" name="confidence_codeReview" id="confidence_level_1_2" required="true"/></label></td>
+                                <td><label for="confidence_level_1_3"><input type="radio" value="3" name="confidence_codeReview" id="confidence_level_1_3" required="true"/></label></td>
+                                <td><label for="confidence_level_1_4"><input type="radio" value="4" name="confidence_codeReview" id="confidence_level_1_4" required="true"/></label></td>
+                                <td><label for="confidence_level_1_5"><input type="radio" value="5" name="confidence_codeReview" id="confidence_level_1_5" required="true"/></label></td>
+                                <td class="outlined"><label for="confidence_level_1_6"><input type="radio" value="6" name="confidence_codeReview" id="confidence_level_1_6" required="true"/></label></td>
+                                <td><label for="confidence_level_1_7"><input type="radio" value="7" name="confidence_codeReview" id="confidence_level_1_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="question" id="confidence_level_2">When facing time constraints in a code review, how confident are you in your ability to prioritize defect detection effectively?</td>
+                                <td><label for="confidence_level_2_1"><input type="radio" value="1" name="confidence_prioritize" id="confidence_level_2_1" required="true"/></label></td>
+                                <td><label for="confidence_level_2_2"><input type="radio" value="2" name="confidence_prioritize" id="confidence_level_2_2" required="true"/></label></td>
+                                <td><label for="confidence_level_2_3"><input type="radio" value="3" name="confidence_prioritize" id="confidence_level_2_3" required="true"/></label></td>
+                                <td><label for="confidence_level_2_4"><input type="radio" value="4" name="confidence_prioritize" id="confidence_level_2_4" required="true"/></label></td>
+                                <td><label for="confidence_level_2_5"><input type="radio" value="5" name="confidence_prioritize" id="confidence_level_2_5" required="true"/></label></td>
+                                <td class="outlined"><label for="confidence_level_2_6"><input type="radio" value="6" name="confidence_prioritize" id="confidence_level_2_6" required="true"/></label></td>
+                                <td><label for="confidence_level_2_7"><input type="radio" value="7" name="confidence_prioritize" id="confidence_level_2_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="confidence_level_3">How confident are you in your capacity to maintain a high standard of code review quality, especially for non-functional defects, under time constraints?</td>
+                                <td><label for="confidence_level_3_1"><input type="radio" value="1" name="confidence_highStandard" id="confidence_level_3_1" required="true"/></label></td>
+                                <td><label for="confidence_level_3_2"><input type="radio" value="2" name="confidence_highStandard" id="confidence_level_3_2" required="true"/></label></td>
+                                <td><label for="confidence_level_3_3"><input type="radio" value="3" name="confidence_highStandard" id="confidence_level_3_3" required="true"/></label></td>
+                                <td><label for="confidence_level_3_4"><input type="radio" value="4" name="confidence_highStandard" id="confidence_level_3_4" required="true"/></label></td>
+                                <td><label for="confidence_level_3_5"><input type="radio" value="5" name="confidence_highStandard" id="confidence_level_3_5" required="true"/></label></td>
+                                <td class="outlined"><label for="confidence_level_3_6"><input type="radio" value="6" name="confidence_highStandard" id="confidence_level_3_6" required="true"/></label></td>
+                                <td><label for="confidence_level_3_7"><input type="radio" value="7" name="confidence_highStandard" id="confidence_level_3_7" required="true"/></label></td>
+                            </tr>
+                            <tr>
+                                <td width="580" class="question" id="confidence_level_4">When personally setting time restrictions for your code reviews, how confident are you in your ability to complete them successfully?</td>
+                                <td><label for="confidence_level_4_1"><input type="radio" value="1" name="confidence_internally" id="confidence_level_4_1" required="true"/></label></td>
+                                <td><label for="confidence_level_4_2"><input type="radio" value="2" name="confidence_internally" id="confidence_level_4_2" required="true"/></label></td>
+                                <td><label for="confidence_level_4_3"><input type="radio" value="3" name="confidence_internally" id="confidence_level_4_3" required="true"/></label></td>
+                                <td><label for="confidence_level_4_4"><input type="radio" value="4" name="confidence_internally" id="confidence_level_4_4" required="true"/></label></td>
+                                <td><label for="confidence_level_4_5"><input type="radio" value="5" name="confidence_internally" id="confidence_level_4_5" required="true"/></label></td>
+                                <td class="outlined"><label for="confidence_level_4_6"><input type="radio" value="6" name="confidence_internally" id="confidence_level_4_6" required="true"/></label></td>
+                                <td><label for="confidence_level_4_7"><input type="radio" value="7" name="confidence_internally" id="confidence_level_4_7" required="true"/></label></td>
+                            </tr>
+                            <tr>
+                                <td width="580" class="question" id="confidence_level_5">How confident are you in your ability to make efficient decisions and adapt when time is limited during a code review?</td>
+                                <td><label for="confidence_level_5_1"><input type="radio" value="1" name="confidence_efficient" id="confidence_level_5_1" required="true"/></label></td>
+                                <td><label for="confidence_level_5_2"><input type="radio" value="2" name="confidence_efficient" id="confidence_level_5_2" required="true"/></label></td>
+                                <td><label for="confidence_level_5_3"><input type="radio" value="3" name="confidence_efficient" id="confidence_level_5_3" required="true"/></label></td>
+                                <td><label for="confidence_level_5_4"><input type="radio" value="4" name="confidence_efficient" id="confidence_level_5_4" required="true"/></label></td>
+                                <td><label for="confidence_level_5_5"><input type="radio" value="5" name="confidence_efficient" id="confidence_level_5_5" required="true"/></label></td>
+                                <td class="outlined"><label for="confidence_level_5_6"><input type="radio" value="6" name="confidence_efficient" id="confidence_level_5_6" required="true"/></label></td>
+                                <td><label for="confidence_level_5_7"><input type="radio" value="7" name="confidence_efficient" id="confidence_level_5_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="confidence_level_6">How confident are you in your capacity to find innovative solutions and prioritize tasks during code reviews when time is a critical factor?</td>
+                                <td><label for="confidence_level_6_1"><input type="radio" value="1" name="confidence_innovative" id="confidence_level_6_1" required="true"/></label></td>
+                                <td><label for="confidence_level_6_2"><input type="radio" value="2" name="confidence_innovative" id="confidence_level_6_2" required="true"/></label></td>
+                                <td><label for="confidence_level_6_3"><input type="radio" value="3" name="confidence_innovative" id="confidence_level_6_3" required="true"/></label></td>
+                                <td><label for="confidence_level_6_4"><input type="radio" value="4" name="confidence_innovative" id="confidence_level_6_4" required="true"/></label></td>
+                                <td><label for="confidence_level_6_5"><input type="radio" value="5" name="confidence_innovative" id="confidence_level_6_5" required="true"/></label></td>
+                                <td class="outlined"><label for="confidence_level_6_6"><input type="radio" value="6" name="confidence_innovative" id="confidence_level_6_6" required="true"/></label></td>
+                                <td><label for="confidence_level_6_7"><input type="radio" value="7" name="confidence_innovative" id="confidence_level_6_7" required="true"/></label></td>
+                            </tr>
+
+                            <tr>
+                                <td width="580" class="question" id="confidence_level_7">When conducting code reviews under time constraints, how confident are you in your ability to meet deadlines while maintaining code quality?</td>
+                                <td><label for="confidence_level_7_1"><input type="radio" value="1" name="confidence_deadlines" id="confidence_level_7_1" required="true"/></label></td>
+                                <td><label for="confidence_level_7_2"><input type="radio" value="2" name="confidence_deadlines" id="confidence_level_7_2" required="true"/></label></td>
+                                <td><label for="confidence_level_7_3"><input type="radio" value="3" name="confidence_deadlines" id="confidence_level_7_3" required="true"/></label></td>
+                                <td><label for="confidence_level_7_4"><input type="radio" value="4" name="confidence_deadlines" id="confidence_level_7_4" required="true"/></label></td>
+                                <td><label for="confidence_level_7_5"><input type="radio" value="5" name="confidence_deadlines" id="confidence_level_7_5" required="true"/></label></td>
+                                <td class="outlined"><label for="confidence_level_7_6"><input type="radio" value="6" name="confidence_deadlines" id="confidence_level_7_6" required="true"/></label></td>
+                                <td><label for="confidence_level_7_7"><input type="radio" value="7" name="confidence_deadlines" id="confidence_level_7_7" required="true"/></label></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </fieldset>#}
+
+
+
+                <fieldset id="fieldset_question_timeConstraint" class="container_radio_buttons"><p>In your experience, how do time constraints influence <strong>the quality of code reviews?</strong> </p>
+                    <label><textarea type="text" name="question_influence_timeConstraint" id="qtimeConstraint" class="input-text"></textarea> </label>
+                </fieldset>
+
+                <button type="submit" id="submitter" class="button blue">Next</button>
+            </form>
+
+        </section>
+    </body>
+</html>

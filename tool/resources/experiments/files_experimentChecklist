@@ -1,0 +1,263 @@
+~~~0L-src/main/java/experiment/UserRegistration.java
+package main.java.service;
+
+import com.ba.beans.User;
+import com.ba.db.DBConnection;
+import com.ba.service.PasswordManagement;
+import com.ba.service.SsnManager;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.PreparedStatement;
+
+public class UserRegistration {
+
+    /**
+     * Reads the User input credentials and creates a new
+     * table entry if the user-supplied input is valid and
+     * the supplied password is strong enough.
+     * @param registerBean temporary communication object that
+     * holds the user input credentials
+     * @return String for success or SQLState Error
+     */
+
+    public String registerUser(User registerBean){
+        
+        //Todo
+        return null;
+    }
+}
+~~~~
+
+~~~1L-src/main/java/experiment/PasswordManagement.java
+package main.java.service;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class PasswordManagement {
+
+    /**
+     * Minimum password length: 8 Characters
+     * Maximum password length: 64 Characters
+     * Suggested Password length: 20 or more Characters
+     * Has to contain at least one lowercase letter
+     * Has to contain at least one uppercase letter
+     * Has to contain at least one number
+     * Has to contain at least one special character
+     * @param password The password set by the user
+     * @return boolean true for success, false for failure
+     */
+    public boolean checkPasswordStrength(String password){
+
+        //Todo
+        return null;
+    }
+
+
+    /**
+     * Hashes the input string using md5 hashing algorithm
+     * @param data the string to be hashed
+     * @return hexadecimal hash string
+     * @throws NoSuchAlgorithmException, NoSuchProviderException
+     */
+    public String generateHash(String data) {
+        
+        //Todo
+        return null;
+    }
+
+
+    /**
+     * Converts the byte hash string to a hexadecimal hash string
+     * @param bytes A byte array
+     * @return hexadecimal hash String
+     */
+    private static String bytesToStringHex(byte[] bytes) {
+        
+        //Todo
+        return null;
+    }
+
+
+    /**
+     * Generates a salt to randomize the provided password
+     * @param none
+     * @return byte array of the randomly generated salt
+     * @throws NoSuchAlgorithmException, NoSuchProviderException
+     */
+    private static byte[] createSalt() {
+
+        //Todo
+        return null;
+    }
+}
+~~~~
+
+~~~0R-src/main/java/experiment/UserRegistration.java
+package main.java.service;
+
+import com.ba.beans.User;
+import com.ba.db.DBConnection;
+import com.ba.service.PasswordManagement;
+import com.ba.service.SsnManager;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.PreparedStatement;
+
+public class UserRegistration {
+
+    /**
+     * Reads the User input credentials and creates a new
+     * table entry if the user-supplied input is valid and
+     * the supplied password is strong enough.
+     * @param registerBean temporary communication object that
+     * holds the user input credentials
+     * @return String for success or SQLState Error
+     */
+
+    public String registerUser(User registerBean){
+        String firstName = registerBean.getFirstName();
+        String lastName = registerBean.getLastName();
+        String email = registerBean.getEmail();
+        String userName = registerBean.getUserName();
+        String password = registerBean.getPassword();
+        String salt = registerBean.getSalt();
+
+        Connection con;
+        PreparedStatement statement = null;
+
+        PasswordManagement passwordManager = new PasswordManagement();
+
+        if(!passwordManager.checkPasswordStrength(password)){
+            return "Please use a stronger Password";
+        }
+
+        try {
+            con = DBConnection.createConnection();
+            statement = con.prepareStatement("insert into user values(?,?,?,?,?,?)");
+
+            statement.setString(1, firstName);
+            statement.setString(2, lastName);
+            statement.setString(3, email);
+            statement.setString(4, userName);
+            statement.setString(5, generateHash(password));
+            statement.setString(6, salt);
+
+            int result = statement.executeUpdate();
+
+            if(result!=0) {
+                return "SUCCESS";
+            }
+        } catch (SQLException e) {
+            String logMessage = "Unable to retrieve account information from database," +
+                    "\\n query: " + statement;
+            Logger.getLogger(SsnManager.class.getName()).log(Level.SEVERE, logMessage, e);
+            return e.getSQLState();
+        }
+
+        return "Something went wrong";
+    }
+}
+~~~~
+
+~~~1R-src/main/java/experiment/PasswordManagement.java
+package main.java.service;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class PasswordManagement {
+
+    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    private final static String HASH_ALGORITHM = "MD5";
+    private final static int PW_DIFFICULTY = 9;
+
+    /**
+     * Minimum password length: 8 Characters
+     * Maximum password length: 64 Characters
+     * Suggested Password length: 20 or more Characters
+     * Has to contain at least one lowercase letter
+     * Has to contain at least one uppercase letter
+     * Has to contain at least one number
+     * Has to contain at least one special character
+     * @param password The password set by the user
+     * @return boolean true for success, false for failure
+     */
+    public boolean checkPasswordStrength(String password){
+
+        int iPasswordScore = 0;
+
+        if( password.length() < 8 || password.length() > 64 )
+            return false;
+
+        else if( password.length() >= 20 )
+            iPasswordScore += 2;
+        else
+            iPasswordScore += 1;
+
+        if( password.matches("(?=.*[0-9]).*") )
+            iPasswordScore += 2;
+
+        if( password.matches("(?=.*[a-z]).*") )
+            iPasswordScore += 2;
+
+        if( password.matches("(?=.*[A-Z]).*") )
+            iPasswordScore += 2;
+
+        if( password.matches("(?=.*[~!@#$%^&*()_-]).*") )
+            iPasswordScore += 2;
+
+        return iPasswordScore >= PW_DIFFICULTY;
+    }
+
+
+    /**
+     * Hashes the input string using md5 hashing algorithm
+     * @param data the string to be hashed
+     * @return hexadecimal hash string
+     * @throws NoSuchAlgorithmException, NoSuchProviderException
+     */
+    public String generateHash(String data) throws NoSuchAlgorithmException, NoSuchProviderException {
+        MessageDigest md = MessageDigest.getInstance(HASH_ALGORITHM);
+        md.update(createSalt());
+        byte[] hash = md.digest(data.getBytes());
+        return bytesToStringHex(hash);
+    }
+
+
+    /**
+     * Converts the byte hash string to a hexadecimal hash string
+     * @param bytes A byte array
+     * @return hexadecimal hash String
+     */
+    private static String bytesToStringHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++){
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
+
+
+    /**
+     * Generates a salt to randomize the provided password
+     * @param none
+     * @return byte array of the randomly generated salt
+     * @throws NoSuchAlgorithmException, NoSuchProviderException
+     */
+    private static byte[] createSalt() throws NoSuchAlgorithmException, NoSuchProviderException {
+        SecureRandom rn = SecureRandom.getInstance("SHA1PRNG","SUN");
+        byte[] salt = new byte[16];
+        rn.nextBytes(salt);
+        return salt;
+    }
+}
+~~~~
